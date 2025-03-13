@@ -108,7 +108,7 @@ jobs:
         
         if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
         	KSU_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
-        	KSU_VERSION=$(expr 10200 + $KSU_REV_COUNT)
+        	KSU_VERSION=$(expr 10198 + $KSU_REV_COUNT)
         else
         	KSU_VERSION="No KernelSU-Next"
         fi
