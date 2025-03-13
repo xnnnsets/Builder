@@ -33,7 +33,7 @@ jobs:
       run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
     - uses: actions/checkout@v4
       with:
-        repository: rsuntkOrgs/kernel_samsung_a34x
+        repository: xnnnsets/kernel_samsung_a34x
         path: kernel_root
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
