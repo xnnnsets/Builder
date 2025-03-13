@@ -11,7 +11,7 @@ on:
         default: 'rsuntk-a34x_defconfig'
         required: true
       KSU:
-        description: Add KernelSU support
+        description: Add KernelSU-Next support
         type: boolean
       UPLOAD_TO_TG:
         description: Upload to Telegram (setup env required)
@@ -107,12 +107,12 @@ jobs:
         bash $(pwd)/build.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
         
         if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
-        	KSU_REV_COUNT=$(cd KernelSU && git rev-list --count HEAD)
+        	KSU_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
         	KSU_VERSION=$(expr 10200 + $KSU_REV_COUNT)
         else
-        	KSU_VERSION="No KernelSU"
+        	KSU_VERSION="No KernelSU-Next"
         fi
-        echo "- KernelSU version: $KSU_VERSION"
+        echo "- KernelSU-Next version: $KSU_VERSION"
         
         ## CREATE buildDetails.txt
         printf "Localversion: `./getutsrel`
