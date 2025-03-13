@@ -60,11 +60,6 @@ jobs:
           <b>Device:</b> a34x
           <b>Branch:</b> ${{ github.event.inputs.BRANCH }}
           <b>Workflows:</b> ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-         if [[ "${{ github.event.inputs.SELINUX_PERMISSIVE }}" = "true" ]]; then
-          <b>SELINUX_STATE:<b> Permissive
-         else
-          <b>SELINUX_STATE=<b> Enforcing
-         fi
 
     - name: Prepare dependencies
       run: |
