@@ -60,6 +60,10 @@ jobs:
           <b>Device:</b> a34x
           <b>Branch:</b> ${{ github.event.inputs.BRANCH }}
           <b>Workflows:</b> ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          <b>KernelSU:</b> ${{ github.event.inputs.KSU == 'true' && 'Enabled ✅' || 'Disabled ❌' }}
+          <b>KernelSU-Next:</b> ${{ github.event.inputs.KSUN == 'true' && 'Enabled ✅' || 'Disabled ❌' }}
+          <b>KernelSU-Next Susfs Patch:</b> ${{ github.event.inputs.KSUN_SUSFS == 'true' && 'Enabled ✅ (Manual patch required!)' || 'Disabled ❌' }}
+          <b>Selinux:</b> ${{ github.event.inputs.SELINUX_PERMISSIVE == 'true' && 'Permissive' || 'Enforcing' }}
 
     - name: Prepare dependencies
       run: |
