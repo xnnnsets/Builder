@@ -11,7 +11,13 @@ on:
         default: 'rsuntk-a34x_defconfig'
         required: true
       KSU:
+        description: Add KernelSU support
+        type: boolean
+      KSUN:
         description: Add KernelSU-Next support
+        type: boolean
+      KSUN_SUSFS:
+        description: Add KernelSU-Next Susfs Patch, in kernel need patch manual!!
         type: boolean
       UPLOAD_TO_TG:
         description: Upload to Telegram (setup env required)
@@ -92,7 +98,9 @@ jobs:
         export DEFCONFIG="${{ github.event.inputs.DEFCONFIG }}"
         export DEVICE="A346E"
         export DEVICE_ID="A34 5G"
+        export KERNELSU-NEXT="${{ github.event.inputs.KSUN }}"
         export KERNELSU="${{ github.event.inputs.KSU }}"
+        export KERNELSU-NEXT-SUSFS="${{ github.event.inputs.KSUN_SUSFS }}"
 
         if [[ "${{ github.event.inputs.SELINUX_PERMISSIVE }}" = "true" ]]; then
           cd security && rm -rf selinux
@@ -105,20 +113,38 @@ jobs:
         fi
         
         bash $(pwd)/build.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
+
+        if [[ "${{ github.event.inputs.KSUN }}" = "true" ]]; then
+        	KSUN_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
+        	KSUN_VERSION=$(expr 10198 + $KSUN_REV_COUNT)
+          echo "- KernelSU-Next version: $KSUN_VERSION"
+        else
+        	KSUN_VERSION="No KernelSU-Next"
+        fi
+
+        if [[ "${{ github.event.inputs.KSUN_SUSFS }}" = "true" ]]; then
+        	KSUN_SUSFS_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
+        	KSUN_SUSFS_VERSION=$(expr 10198 + $KSUN_SUSFS_REV_COUNT)
+          echo "- KernelSU-Next-Susfs version: $KSUN_SUSFS_VERSION"
+        else
+        	KSUN_SUSFS_VERSION="No KernelSU-Next-Susfs"
+        fi
         
         if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
-        	KSU_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
-        	KSU_VERSION=$(expr 10198 + $KSU_REV_COUNT)
+        	KSU_REV_COUNT=$(cd KernelSU && git rev-list --count HEAD)
+        	KSU_VERSION=$(expr 10200 + $KSU_REV_COUNT)
+          echo "- KernelSU version: $KSU_VERSION"
         else
-        	KSU_VERSION="No KernelSU-Next"
+        	KSU_VERSION="No KernelSU"
         fi
-        echo "- KernelSU-Next version: $KSU_VERSION"
         
         ## CREATE buildDetails.txt
         printf "Localversion: `./getutsrel`
         Clang version: `clang -v 2>&1 | grep ' version ' | sed 's/[[:space:]]*$//'`
         Build: `echo $BUILD_START`
         Defconfig: `echo $DEFCONFIG`
+        KernelSU-Next: `echo $KSUN_VERSION`
+        KernelSU-Next-Susfs: `echo $KSUN_SUSFS_VERSION`
         KernelSU: `echo $KSU_VERSION`
         LTO: `echo $LTO`
         SELinux: `echo $SELINUX_STATE`
