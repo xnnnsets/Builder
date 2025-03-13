@@ -60,7 +60,12 @@ jobs:
           <b>Device:</b> a34x
           <b>Branch:</b> ${{ github.event.inputs.BRANCH }}
           <b>Workflows:</b> ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          
+         if [[ "${{ github.event.inputs.SELINUX_PERMISSIVE }}" = "true" ]]; then
+          <b>SELINUX_STATE:<b> Permissive
+         else
+          <b>SELINUX_STATE=<b> Enforcing
+         fi
+
     - name: Prepare dependencies
       run: |
         sudo apt update -y
@@ -98,9 +103,9 @@ jobs:
         export DEFCONFIG="${{ github.event.inputs.DEFCONFIG }}"
         export DEVICE="A346E"
         export DEVICE_ID="A34 5G"
-        export KERNELSU-NEXT="${{ github.event.inputs.KSUN }}"
+        export KERNELSU_NEXT="${{ github.event.inputs.KSUN }}"
         export KERNELSU="${{ github.event.inputs.KSU }}"
-        export KERNELSU-NEXT-SUSFS="${{ github.event.inputs.KSUN_SUSFS }}"
+        export KERNELSU_NEXT_SUSFS="${{ github.event.inputs.KSUN_SUSFS }}"
 
         if [[ "${{ github.event.inputs.SELINUX_PERMISSIVE }}" = "true" ]]; then
           cd security && rm -rf selinux
