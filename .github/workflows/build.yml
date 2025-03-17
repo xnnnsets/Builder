@@ -8,7 +8,7 @@ on:
         required: true
       DEFCONFIG:
         description: Kernel defconfig
-        default: 'rsuntk-a34x_defconfig'
+        default: 'rsuntk-susfs-a34x_defconfig'
         required: true
       KSU:
         description: Add KernelSU support
@@ -95,7 +95,7 @@ jobs:
         export CROSS_COMPILE="aarch64-linux-gnu-"
         export CLANG_TRIPLE="aarch64-linux-gnu-"
         export LTO="thin"
-        export KBUILD_BUILD_USER="rsuntk"
+        export KBUILD_BUILD_USER="xnnnsets"
         export KBUILD_BUILD_HOST="rsuntkOrgs"
         export BUILD_START=`date`
         export IS_CI=true
@@ -195,7 +195,7 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           ZIP=$(find `pwd` -name "*.zip")
-          git clone https://github.com/rsuntk/rsuntkBotScript.git --depth=1 i && cp ./i/* . && rm -rf i
+          git clone https://github.com/xnnnsets/rsuntkBotScript.git --depth=1 i && cp ./i/* . && rm -rf i
           bash $(pwd)/rsuntkbot.sh $ZIP "`cat buildDetails.txt`"
         fi
       working-directory: kernel_root
